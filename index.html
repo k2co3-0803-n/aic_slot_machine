@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AICスロット</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand-title" aria-label="AICスロット">
+          <h1 class="sr-only">AICスロット</h1>
+          <span class="brand-image-frame brand-wordmark">
+            <img src="aic_logo_pen_re.png" alt="AIC Keio University" />
+          </span>
+        </div>
+        <div class="status-strip" aria-label="抽選状況">
+          <div>
+            <span id="totalCount">0</span>
+            <small>登録番号</small>
+          </div>
+          <div>
+            <span id="remainingCount">0</span>
+            <small>抽選対象</small>
+          </div>
+          <div>
+            <span id="winnerCount">0</span>
+            <small>当選済み</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="抽選アプリ">
+        <aside class="setup-panel">
+          <div class="panel-heading">
+            <h2>番号登録</h2>
+            <button class="icon-button ghost" id="clearAllButton" type="button" title="全データを初期化" aria-label="全データを初期化">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 6h18" />
+                <path d="M8 6V4h8v2" />
+                <path d="M6 6l1 15h10l1-15" />
+                <path d="M10 11v6" />
+                <path d="M14 11v6" />
+              </svg>
+            </button>
+          </div>
+
+          <label class="field-label" for="ticketInput">整理券番号</label>
+          <textarea id="ticketInput" spellcheck="false" placeholder="例&#10;001&#10;002&#10;003&#10;または 1, 2, 3"></textarea>
+
+          <div class="range-row">
+            <label>
+              <span>開始</span>
+              <input id="rangeStart" type="text" inputmode="numeric" placeholder="001" />
+            </label>
+            <label>
+              <span>終了</span>
+              <input id="rangeEnd" type="text" inputmode="numeric" placeholder="120" />
+            </label>
+            <button class="secondary-button" id="addRangeButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+              </svg>
+              範囲追加
+            </button>
+          </div>
+
+          <div class="button-row">
+            <button class="primary-button" id="applyButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              抽選対象に反映
+            </button>
+            <button class="secondary-button" id="sampleButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 19.5V6a2 2 0 0 1 2-2h12v16H6a2 2 0 0 1-2-.5Z" />
+                <path d="M8 8h7" />
+                <path d="M8 12h6" />
+              </svg>
+              サンプル
+            </button>
+          </div>
+
+          <p class="message" id="inputMessage" role="status"></p>
+        </aside>
+
+        <section class="slot-panel">
+          <div class="slot-machine" aria-live="polite">
+            <div class="machine-light left"></div>
+            <div class="machine-light right"></div>
+            <div class="reel-window" id="reelWindow">
+              <span class="reel-number" id="slotNumber">---</span>
+            </div>
+            <p class="draw-label" id="drawLabel">抽選待機中</p>
+          </div>
+
+          <div class="draw-actions">
+            <button class="draw-button" id="drawButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true" id="drawIcon">
+                <path d="M5 3l14 9-14 9V3Z" />
+              </svg>
+              <span id="drawButtonLabel">抽選開始</span>
+            </button>
+            <button class="secondary-button" id="undoButton" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 14 4 9l5-5" />
+                <path d="M4 9h10a6 6 0 1 1 0 12h-3" />
+              </svg>
+              直前を取消
+            </button>
+            <button class="secondary-button" id="exportButton" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12" />
+                <path d="m7 10 5 5 5-5" />
+                <path d="M5 21h14" />
+              </svg>
+              CSV出力
+            </button>
+          </div>
+        </section>
+
+        <section class="history-panel">
+          <div class="panel-heading">
+            <h2>当選履歴</h2>
+            <button class="icon-button ghost" id="clearHistoryButton" type="button" title="履歴をクリア" aria-label="履歴をクリア" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 6h18" />
+                <path d="M8 6V4h8v2" />
+                <path d="M6 6l1 15h10l1-15" />
+              </svg>
+            </button>
+          </div>
+          <ol class="winner-list" id="winnerList" aria-live="polite"></ol>
+          <p class="empty-state" id="emptyHistory">まだ当選番号はありません</p>
+        </section>
+      </section>
+    </main>
+
+    <template id="winnerItemTemplate">
+      <li>
+        <span class="winner-rank"></span>
+        <strong class="winner-number"></strong>
+        <time class="winner-time"></time>
+        <button class="icon-button" type="button" title="この番号を履歴から戻す" aria-label="この番号を履歴から戻す">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 3-6.7" />
+            <path d="M3 3v6h6" />
+          </svg>
+        </button>
+      </li>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
