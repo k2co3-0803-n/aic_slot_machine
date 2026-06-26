@@ -15,20 +15,6 @@
             <img src="aic_logo_pen_re.png" alt="AIC Keio University" />
           </span>
         </div>
-        <div class="status-strip" aria-label="抽選状況">
-          <div>
-            <span id="totalCount">0</span>
-            <small>登録番号</small>
-          </div>
-          <div>
-            <span id="remainingCount">0</span>
-            <small>抽選対象</small>
-          </div>
-          <div>
-            <span id="winnerCount">0</span>
-            <small>当選済み</small>
-          </div>
-        </div>
       </header>
 
       <section class="workspace" aria-label="抽選アプリ">
@@ -119,6 +105,41 @@
               </svg>
               CSV出力
             </button>
+            <button class="secondary-button" id="winnerSummaryButton" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 6h13" />
+                <path d="M8 12h13" />
+                <path d="M8 18h13" />
+                <path d="M3 6h.01" />
+                <path d="M3 12h.01" />
+                <path d="M3 18h.01" />
+              </svg>
+              一覧
+            </button>
+            <button class="secondary-button anthem-control-button" id="anthemToggleButton" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true" id="anthemToggleIcon">
+                <path d="M8 5v14l11-7-11-7Z" />
+              </svg>
+              <span id="anthemToggleLabel">再生/停止</span>
+            </button>
+            <button class="secondary-button anthem-restart-button" id="anthemRestartButton" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 4v6h6" />
+                <path d="M20 20v-6h-6" />
+                <path d="M20 10a8 8 0 0 0-13.7-5.7L4 10" />
+                <path d="M4 14a8 8 0 0 0 13.7 5.7L20 14" />
+              </svg>
+              最初から流す
+            </button>
+            <input class="sr-only" id="anthemInput" type="file" accept="audio/*" />
+            <button class="secondary-button" id="anthemButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 18V5l12-2v13" />
+                <circle cx="6" cy="18" r="3" />
+                <circle cx="18" cy="16" r="3" />
+              </svg>
+              応援歌音源
+            </button>
           </div>
         </section>
 
@@ -134,10 +155,62 @@
             </button>
           </div>
           <ol class="winner-list" id="winnerList" aria-live="polite"></ol>
-          <p class="empty-state" id="emptyHistory">まだ当選番号はありません</p>
         </section>
       </section>
     </main>
+
+    <div class="slot-fx-layer" id="slotFxLayer" aria-hidden="true">
+      <div class="keio-pageantry">
+        <span class="victory-ribbon ribbon-left"></span>
+        <span class="victory-ribbon ribbon-right"></span>
+        <span class="gold-spark spark-a"></span>
+        <span class="gold-spark spark-b"></span>
+        <span class="gold-spark spark-c"></span>
+        <span class="gold-spark spark-d"></span>
+        <span class="gold-spark spark-e"></span>
+        <span class="gold-spark spark-f"></span>
+      </div>
+      <div class="dance-field">
+        <img class="dance-mascot mascot-a" src="aic_mascots_sprite.png" alt="" />
+        <img class="dance-mascot mascot-b" src="aic_mascots_sprite.png" alt="" />
+        <img class="dance-mascot mascot-c" src="aic_mascots_sprite.png" alt="" />
+        <img class="dance-mascot mascot-d" src="aic_mascots_sprite.png" alt="" />
+        <span class="casino-chip chip-a"></span>
+        <span class="casino-chip chip-b"></span>
+        <span class="casino-chip chip-c"></span>
+        <span class="casino-chip chip-d"></span>
+        <span class="casino-chip chip-e"></span>
+      </div>
+      <div class="impact-scene">
+        <div class="impact-shadow"></div>
+        <span class="confetti-cannon cannon-left primary-burst"></span>
+        <span class="confetti-cannon cannon-left secondary-burst"></span>
+        <span class="confetti-cannon cannon-right primary-burst"></span>
+        <span class="confetti-cannon cannon-right secondary-burst"></span>
+        <div class="victory-title">陸の王者</div>
+        <img class="impact-mascot" src="aic_mascots_sprite.png" alt="" />
+        <span class="impact-dust dust-a"></span>
+        <span class="impact-dust dust-b"></span>
+        <span class="impact-dust dust-c"></span>
+        <span class="impact-dust dust-d"></span>
+      </div>
+    </div>
+
+    <div class="winner-modal" id="winnerSummaryModal" role="dialog" aria-modal="true" aria-labelledby="winnerSummaryTitle" hidden>
+      <div class="winner-modal-backdrop"></div>
+      <section class="winner-modal-panel">
+        <div class="winner-modal-header">
+          <h2 id="winnerSummaryTitle">当選者リスト</h2>
+          <button class="icon-button ghost" id="winnerSummaryCloseButton" type="button" title="一覧を閉じる" aria-label="一覧を閉じる">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="winner-summary-grid" id="winnerSummaryGrid" aria-label="当選番号一覧"></div>
+      </section>
+    </div>
 
     <template id="winnerItemTemplate">
       <li>
