@@ -415,18 +415,27 @@ svg {
 .impact-mascot {
   position: absolute;
   z-index: 2;
-  top: 55%;
-  left: 50%;
-  width: min(76vw, 760px);
-  max-height: 78vh;
+  top: clamp(76px, 13vh, 132px);
+  width: clamp(150px, 20vw, 300px);
+  max-height: 36vh;
   object-fit: contain;
   opacity: 0;
-  transform-origin: 50% 92%;
+  transform-origin: 50% 18%;
   filter:
     blur(4px)
     drop-shadow(0 0 22px rgba(244, 216, 121, 0.58))
     drop-shadow(0 34px 44px rgba(0, 0, 0, 0.28));
   will-change: transform, opacity, filter;
+}
+
+.impact-mascot-left {
+  left: clamp(16px, 4vw, 76px);
+  --impact-tilt: -5deg;
+}
+
+.impact-mascot-right {
+  right: clamp(16px, 4vw, 76px);
+  --impact-tilt: 5deg;
 }
 
 .slot-fx-layer.is-impact .impact-mascot {
@@ -445,54 +454,6 @@ svg {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.12);
   will-change: transform, opacity;
-}
-
-.victory-title {
-  position: absolute;
-  top: clamp(66px, 10vh, 118px);
-  left: 50%;
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  width: min(78vw, 840px);
-  min-height: clamp(70px, 10vw, 126px);
-  color: var(--keio-gold-bright);
-  font-size: clamp(2.2rem, 7vw, 6rem);
-  font-weight: 950;
-  line-height: 1;
-  letter-spacing: 0.08em;
-  text-align: center;
-  text-shadow:
-    0 2px 0 var(--keio-red-dark),
-    0 5px 0 var(--keio-blue-dark),
-    0 0 20px rgba(244, 216, 121, 0.9),
-    0 18px 38px rgba(0, 0, 0, 0.32);
-  opacity: 0;
-  transform: translate(-50%, -18px) scale(0.82);
-  will-change: transform, opacity;
-}
-
-.victory-title::before,
-.victory-title::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: min(18vw, 180px);
-  height: 8px;
-  background: linear-gradient(90deg, transparent, var(--keio-gold-bright), transparent);
-  box-shadow: 0 0 16px rgba(244, 216, 121, 0.74);
-}
-
-.victory-title::before {
-  right: calc(100% - 26px);
-}
-
-.victory-title::after {
-  left: calc(100% - 26px);
-}
-
-.slot-fx-layer.is-impact .victory-title {
-  animation: victoryTitleImpact 1.48s cubic-bezier(0.16, 0.86, 0.26, 1) both;
 }
 
 .slot-fx-layer.is-impact .impact-shadow {
@@ -980,6 +941,14 @@ input {
   animation: winnerPop 0.46s cubic-bezier(0.2, 0.9, 0.25, 1.25);
 }
 
+.reel-number.winner-showcase {
+  z-index: 4;
+  animation: winnerShowcase 1.12s cubic-bezier(0.12, 0.86, 0.18, 1) both;
+  filter:
+    drop-shadow(0 0 18px rgba(244, 216, 121, 0.84))
+    drop-shadow(0 18px 28px rgba(0, 0, 0, 0.28));
+}
+
 .draw-label {
   position: relative;
   z-index: 1;
@@ -990,22 +959,32 @@ input {
 }
 
 .draw-actions {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  align-content: center;
   justify-content: center;
+  gap: 12px;
   min-height: 104px;
   padding: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   background: var(--keio-blue-dark);
 }
 
+.draw-actions > button {
+  flex: 0 0 128px;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0 12px;
+  gap: 6px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
 .draw-button {
-  min-width: 180px;
-  min-height: 56px;
-  padding: 0 24px;
   background: var(--keio-red);
   color: #fff;
   box-shadow: 0 12px 26px rgba(176, 24, 45, 0.34);
-  font-size: 1.04rem;
 }
 
 .draw-button:hover:not(:disabled) {
@@ -1013,7 +992,6 @@ input {
 }
 
 .draw-actions .secondary-button {
-  min-height: 48px;
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.18);
   color: #fff;
@@ -1273,6 +1251,25 @@ input {
   }
 }
 
+@keyframes winnerShowcase {
+  0% {
+    color: #11141a;
+    transform: scale(0.86);
+  }
+  24% {
+    color: var(--keio-red);
+    transform: scale(1.55);
+  }
+  58% {
+    color: var(--keio-red);
+    transform: scale(1.4);
+  }
+  100% {
+    color: #11141a;
+    transform: scale(1);
+  }
+}
+
 @keyframes royalRays {
   0% {
     transform: rotate(0deg) scale(1);
@@ -1510,60 +1507,33 @@ input {
 @keyframes mascotImpact {
   0% {
     opacity: 0;
-    transform: translate(-50%, -58%) translateZ(-920px) scale(0.12) rotateX(42deg);
+    transform: translate(0, -70%) translateZ(-520px) scale(0.12) rotate(var(--impact-tilt, 0deg)) rotateX(36deg);
     filter: blur(5px) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
   }
   18% {
     opacity: 1;
   }
   36% {
-    transform: translate(-50%, -45%) translateZ(120px) scale(1.08) rotateX(-7deg);
+    transform: translate(0, -12%) translateZ(90px) scale(1.08) rotate(var(--impact-tilt, 0deg)) rotateX(-7deg);
     filter: blur(0) drop-shadow(0 32px 44px rgba(0, 0, 0, 0.25));
   }
   51% {
     opacity: 1;
-    transform: translate(-50%, -25%) translateZ(0) scale(1.18, 0.82) rotate(2deg);
+    transform: translate(0, -2%) translateZ(0) scale(1.18, 0.82) rotate(var(--impact-tilt, 0deg));
   }
   64% {
-    transform: translate(-50%, -34%) translateZ(0) scale(0.94, 1.08) rotate(-1deg);
+    transform: translate(0, -8%) translateZ(0) scale(0.94, 1.08) rotate(var(--impact-tilt, 0deg));
   }
   78% {
-    transform: translate(-50%, -28%) translateZ(0) scale(1.04, 0.96) rotate(0.6deg);
+    transform: translate(0, -4%) translateZ(0) scale(1.04, 0.96) rotate(var(--impact-tilt, 0deg));
   }
   88% {
     opacity: 1;
-    transform: translate(-50%, -29%) translateZ(0) scale(1) rotate(0deg);
+    transform: translate(0, -4%) translateZ(0) scale(1) rotate(var(--impact-tilt, 0deg));
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -29%) translateZ(0) scale(0.98) rotate(0deg);
-  }
-}
-
-@keyframes victoryTitleImpact {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -26px) scale(0.72);
-  }
-  24% {
-    opacity: 0;
-    transform: translate(-50%, -18px) scale(0.82);
-  }
-  46% {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1.08);
-  }
-  66% {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(0.98);
-  }
-  88% {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -8px) scale(0.98);
+    transform: translate(0, -4%) translateZ(0) scale(0.98) rotate(var(--impact-tilt, 0deg));
   }
 }
 
@@ -1950,6 +1920,10 @@ input {
     width: 100%;
   }
 
+  .draw-actions > button {
+    flex-basis: 100%;
+  }
+
   .slot-machine {
     padding: 28px 18px;
   }
@@ -2010,7 +1984,6 @@ input {
   .slot-fx-layer .casino-chip,
   .slot-fx-layer .victory-ribbon,
   .slot-fx-layer .gold-spark,
-  .slot-fx-layer .victory-title,
   .slot-fx-layer .confetti-cannon,
   .slot-fx-layer .impact-mascot,
   .slot-fx-layer .impact-shadow,

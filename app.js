@@ -48,6 +48,7 @@ const state = {
   spinSoundTimer: 0,
   coinSoundTimer: 0,
   impactTimer: 0,
+  winnerShowcaseTimer: 0,
   audioContext: null,
   sfxCompressor: null,
   sfxGain: null,
@@ -733,7 +734,8 @@ function startSpin() {
   }
 
   state.spinning = true;
-  elements.slotNumber.classList.remove("winner");
+  window.clearTimeout(state.winnerShowcaseTimer);
+  elements.slotNumber.classList.remove("winner", "winner-showcase");
   elements.slotNumber.classList.add("spinning");
   elements.drawLabel.textContent = "抽選中";
   elements.drawButtonLabel.textContent = "決定";
@@ -770,8 +772,13 @@ function stopSpin() {
   });
 
   elements.slotNumber.textContent = winner;
-  elements.slotNumber.classList.remove("spinning");
-  elements.slotNumber.classList.add("winner");
+  window.clearTimeout(state.winnerShowcaseTimer);
+  elements.slotNumber.classList.remove("spinning", "winner", "winner-showcase");
+  void elements.slotNumber.offsetWidth;
+  elements.slotNumber.classList.add("winner", "winner-showcase");
+  state.winnerShowcaseTimer = window.setTimeout(() => {
+    elements.slotNumber.classList.remove("winner-showcase");
+  }, 1180);
   elements.drawLabel.textContent = `当選番号 ${winner}`;
   setMessage(`${winner} を当選番号に追加しました。`);
   saveState();
