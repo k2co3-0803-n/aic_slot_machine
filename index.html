@@ -77,12 +77,29 @@
 
         <section class="slot-panel">
           <div class="slot-machine" aria-live="polite">
+            <div class="machine-arch" aria-hidden="true">
+              <span class="bulb bulb-1"></span>
+              <span class="bulb bulb-2"></span>
+              <span class="bulb bulb-3"></span>
+              <span class="bulb bulb-4"></span>
+              <span class="bulb bulb-5"></span>
+              <span class="bulb bulb-6"></span>
+              <span class="bulb bulb-7"></span>
+              <strong>AIC SLOTS</strong>
+              <em>KEIO JACKPOT</em>
+            </div>
             <div class="machine-light left"></div>
             <div class="machine-light right"></div>
             <div class="reel-window" id="reelWindow">
-              <span class="reel-number" id="slotNumber">---</span>
+              <div class="reel-cell number-reel">
+                <span class="reel-number" id="slotNumber">---</span>
+              </div>
             </div>
-            <p class="draw-label" id="drawLabel">抽選待機中</p>
+            <div class="jackpot-sign">
+              <span>JACKPOT</span>
+              <p class="draw-label" id="drawLabel">抽選待機中</p>
+            </div>
+            <img class="machine-mascot" src="aic_mascots.png" alt="" aria-hidden="true" />
           </div>
 
           <div class="draw-actions">
