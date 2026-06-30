@@ -2164,6 +2164,8 @@ input {
 }
 
 .machine-arch strong {
+  position: relative;
+  z-index: 1;
   color: #fff3b9;
   font-size: clamp(2rem, 4vw, 4rem);
   font-weight: 1000;
@@ -2174,6 +2176,8 @@ input {
 }
 
 .machine-arch em {
+  position: relative;
+  z-index: 1;
   margin-top: 5px;
   color: #ffffff;
   font-size: clamp(0.72rem, 1vw, 0.9rem);
@@ -2194,6 +2198,7 @@ input {
 
 .bulb {
   position: absolute;
+  z-index: 0;
   width: 16px;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -2201,11 +2206,11 @@ input {
 
 .bulb-1 { left: 28px; bottom: 18px; }
 .bulb-2 { left: 54px; top: 42px; animation-delay: -0.2s; }
-.bulb-3 { left: 118px; top: 10px; animation-delay: -0.4s; }
+.bulb-3 { left: 96px; top: 12px; animation-delay: -0.4s; }
 .bulb-4 { right: 118px; top: 10px; animation-delay: -0.1s; }
 .bulb-5 { right: 54px; top: 42px; animation-delay: -0.3s; }
 .bulb-6 { right: 28px; bottom: 18px; animation-delay: -0.5s; }
-.bulb-7 { left: 50%; top: 4px; transform: translateX(-50%); animation-delay: -0.35s; }
+.bulb-7 { left: 56%; top: 6px; transform: translateX(-50%); animation-delay: -0.35s; }
 
 .machine-light {
   top: 142px;
@@ -2677,6 +2682,25 @@ input {
 
   .machine-arch strong {
     font-size: 2rem;
+  }
+
+  .bulb {
+    width: 12px;
+  }
+
+  .bulb-3 {
+    left: 76px;
+    top: 2px;
+  }
+
+  .bulb-4 {
+    right: 76px;
+    top: 2px;
+  }
+
+  .bulb-7 {
+    left: 50%;
+    top: -2px;
   }
 
   .slot-machine {
